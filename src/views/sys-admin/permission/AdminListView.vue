@@ -44,16 +44,22 @@
       </el-pagination>
     </div>
 
-    <el-dialog title="修改相册" :visible.sync="dialogFormVisible">
+    <el-dialog title="修改管理员" :visible.sync="dialogFormVisible">
       <el-form :model="editForm" :rules="rules" ref="ruleForm" label-width="100px">
-        <el-form-item label="名称" prop="name">
-          <el-input v-model="editForm.name" autocomplete="off"></el-input>
+        <el-form-item label="名称" prop="nickname">
+          <el-input v-model="editForm.nickname" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="简介" prop="description">
+        <el-form-item label="简介" prop="phone">
+          <el-input v-model="editForm.phone" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="排序序号" prop="email">
+          <el-input v-model="editForm.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="排序序号" prop="description">
           <el-input v-model="editForm.description" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="排序序号" prop="sort">
-          <el-input v-model="editForm.sort" autocomplete="off"></el-input>
+        <el-form-item label="是否开启" prop="enable">
+          <el-input v-model="editForm.enable" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -74,22 +80,29 @@ export default {
       currentPage: 1,
       dialogFormVisible: false,
       editForm: {
-        id: '',
-        name: '',
+        nickname: '',
+        phone: '',
+        email: '',
         description: '',
-        sort: ''
+        enable: ''
       },
       rules: {
-        name: [
+        nickname: [
           {required: true, message: '请输入名称', trigger: 'blur'},
           {min: 2, max: 25, message: '长度在 2 到 25 个字符', trigger: 'blur'}
+        ],
+        phone: [
+          {required: true, message: '请输入简介', trigger: 'blur'}
+        ],
+        email: [
+          {required: true, message: '请输入排序序号', trigger: 'blur'},
+          {pattern: /^(\d{1}|[1-9]{1}[0-9]?)$/, message: '排序序号必须是 0~99 之间的数字', trigger: 'blur'}
         ],
         description: [
           {required: true, message: '请输入简介', trigger: 'blur'}
         ],
-        sort: [
-          {required: true, message: '请输入排序序号', trigger: 'blur'},
-          {pattern: /^(\d{1}|[1-9]{1}[0-9]?)$/, message: '排序序号必须是 0~99 之间的数字', trigger: 'blur'}
+        enable: [
+          {required: true, message: '请输入简介', trigger: 'blur'}
         ]
       }
     }
@@ -97,7 +110,7 @@ export default {
   methods: {
     openEditDialog(admin) {
 
-      let url = 'http://localhost:9181/admin/update?id=' + admin.id;
+      let url = 'http://localhost:9181/admin/standard?id=' + admin.id;
       console.log('url = ' + url);
 
       let localJwt = localStorage.getItem('localJwt');
@@ -142,7 +155,7 @@ export default {
         let jsonResult = response.data;
         if (jsonResult.state == 20000) {
           this.$message({
-            message: '修改相册成功！',
+            message: '修改管理员成功！',
             type: 'success'
           });
           this.dialogFormVisible = false;
